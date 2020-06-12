@@ -14,10 +14,12 @@ namespace RelationalRedisAPI.Controllers
     public class HeroesController : ControllerBase
     {
         private IEntityAdapter<Hero> HeroAdapter { get; }
+        private IEntityAdapter<Power> PowerAdapter { get; }
 
-        public HeroesController(IEntityAdapter<Hero> heroAdapter)
+        public HeroesController(IEntityAdapter<Hero> heroAdapter, IEntityAdapter<Power> powerAdapter)
         {
             this.HeroAdapter = heroAdapter;
+            this.PowerAdapter = powerAdapter;
         }
 
         // GET api/heroes
@@ -38,6 +40,25 @@ namespace RelationalRedisAPI.Controllers
             }
 
             return NotFound();
+        }
+
+        // POST api/heroes
+        [HttpPost]
+        public ActionResult<Hero> Create([FromBody] Hero hero)
+        {
+            var heroExists = HeroAdapter.Read(hero.Id).HasValue;
+            if (heroExists)
+            {
+                return UnprocessableEntity();
+            }
+
+            foreach (var power in hero.Powers)
+            {
+                PowerAdapter.Save(power);
+            }
+            HeroAdapter.Save(hero);
+
+            return Created(hero.Id.ToString(), hero);
         }
     }
 }

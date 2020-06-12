@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Adapters;
+using Data;
+using Interfaces;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +27,14 @@ namespace RelationalRedisAPI
 
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "Superhero API", Version = "v1"}); });
 
+            var redisConnectionString = "localhost";
+
+            services.AddTransient<IEntityAdapter<Power>>(_services => new PowerRedisAdapter(redisConnectionString));
+            services.AddTransient<IEntityAdapter<Hero>>(_services =>
+            {
+                var powerAdapter = _services.GetRequiredService<IEntityAdapter<Power>>();
+                return new HeroRedisAdapter(redisConnectionString, powerAdapter);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
