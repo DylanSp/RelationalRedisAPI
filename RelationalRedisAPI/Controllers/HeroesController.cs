@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Data;
+using Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Data;
-using Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace RelationalRedisAPI.Controllers
 {
@@ -24,7 +22,7 @@ namespace RelationalRedisAPI.Controllers
 
         // GET api/heroes
         [HttpGet]
-        public ActionResult<IEnumerable<Hero>> Get()
+        public ActionResult<IEnumerable<Hero>> GetAll()
         {
             return HeroAdapter.ReadAll().ToList();
         }
