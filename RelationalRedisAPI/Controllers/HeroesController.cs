@@ -56,7 +56,7 @@ namespace RelationalRedisAPI.Controllers
             }
             HeroAdapter.Save(hero);
 
-            return Created(hero.Id.ToString(), hero);
+            return Created($"{Request.Scheme}://{Request.Host}{Request.Path}/{hero.Id}", hero);
         }
     }
 }
