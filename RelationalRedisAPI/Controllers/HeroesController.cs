@@ -28,7 +28,7 @@ namespace RelationalRedisAPI.Controllers
         }
 
         // GET api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:guid}", Name = nameof(Get))]
         public ActionResult<Hero> Get([FromRoute]Guid id)
         {
             var maybeHero = HeroAdapter.Read(id);
@@ -56,7 +56,7 @@ namespace RelationalRedisAPI.Controllers
             }
             HeroAdapter.Save(hero);
 
-            return Created($"{Request.Scheme}://{Request.Host}{Request.Path}/{hero.Id}", hero);
+            return CreatedAtRoute(nameof(Get), new {hero.Id}, hero);
         }
     }
 }
