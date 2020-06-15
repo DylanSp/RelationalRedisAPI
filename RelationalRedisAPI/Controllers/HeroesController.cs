@@ -29,7 +29,7 @@ namespace RelationalRedisAPI.Controllers
 
         // GET api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c
         [HttpGet("{id:guid}")]
-        public ActionResult<Hero> Get([FromRoute]Guid id)
+        public ActionResult<Hero> Get([FromRoute] Guid id)
         {
             var maybeHero = HeroAdapter.Read(id);
             if (maybeHero.HasValue)
@@ -50,6 +50,7 @@ namespace RelationalRedisAPI.Controllers
                 return UnprocessableEntity();
             }
 
+            // TODO - is this needed?
             foreach (var power in hero.Powers)
             {
                 PowerAdapter.Save(power);
@@ -57,6 +58,25 @@ namespace RelationalRedisAPI.Controllers
             HeroAdapter.Save(hero);
 
             return Created($"{Request.Scheme}://{Request.Host}{Request.Path}/{hero.Id}", hero);
+        }
+
+        // POST api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c
+        [HttpPost("{id:guid}")]
+        public ActionResult<Hero> Update([FromRoute]Guid id, [FromBody] Hero hero)
+        {
+            var heroExists = HeroAdapter.Read(id).HasValue;
+            if (!heroExists)
+            {
+                return NotFound();
+            }
+
+            if (id != hero.Id)
+            {
+                return BadRequest();
+            }
+
+            HeroAdapter.Save(hero);
+            return hero;
         }
     }
 }
