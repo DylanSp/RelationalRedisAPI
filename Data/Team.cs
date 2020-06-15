@@ -1,14 +1,20 @@
 ﻿using Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace Data
 {
     public struct Team : IEntity
     {
+        [Required]
         public Guid Id { get; }
+        
+        [Required]
         public string Name { get; }
+        
+        [Required]
         public IEnumerable<Hero> Members { get; }
 
         public Team(Guid id, string name, IEnumerable<Hero> members)
