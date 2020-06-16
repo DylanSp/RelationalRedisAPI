@@ -28,8 +28,8 @@ namespace RelationalRedisAPI.Controllers
         }
 
         // GET api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c
-        [HttpGet("{id:guid}")]
-        public ActionResult<Hero> Get([FromRoute] Guid id)
+        [HttpGet("{id:guid}", Name = nameof(Get))]
+        public ActionResult<Hero> Get([FromRoute]Guid id)
         {
             var maybeHero = HeroAdapter.Read(id);
             if (maybeHero.HasValue)
@@ -57,7 +57,21 @@ namespace RelationalRedisAPI.Controllers
             }
             HeroAdapter.Save(hero);
 
-            return Created($"{Request.Scheme}://{Request.Host}{Request.Path}/{hero.Id}", hero);
+            return CreatedAtRoute(nameof(Get), new {hero.Id}, hero);
+        }
+
+        // DELETE api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c
+        [HttpDelete("{id:guid}")]
+        public ActionResult Delete([FromRoute] Guid id)
+        {
+            var heroExists = HeroAdapter.Read(id).HasValue;
+            if (!heroExists)
+            {
+                return NotFound();
+            }
+
+            HeroAdapter.Delete(id);
+            return NoContent();
         }
 
         // POST api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c

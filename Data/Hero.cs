@@ -1,15 +1,23 @@
 ﻿using Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace Data
 {
     public struct Hero : IEntity
     {
+        [Required]
         public Guid Id { get; }
+
+        [Required]
         public string Name { get; }
+        
+        [Required]
         public string Location { get; }
+        
+        [Required]
         public IEnumerable<Power> Powers { get; }
 
         public Hero(Guid id, string name, string location, IEnumerable<Power> powers)
