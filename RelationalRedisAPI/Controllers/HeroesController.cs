@@ -12,12 +12,10 @@ namespace RelationalRedisAPI.Controllers
     public class HeroesController : ControllerBase
     {
         private IEntityAdapter<Hero> HeroAdapter { get; }
-        private IEntityAdapter<Power> PowerAdapter { get; }
 
-        public HeroesController(IEntityAdapter<Hero> heroAdapter, IEntityAdapter<Power> powerAdapter)
+        public HeroesController(IEntityAdapter<Hero> heroAdapter)
         {
             this.HeroAdapter = heroAdapter;
-            this.PowerAdapter = powerAdapter;
         }
 
         // GET api/heroes
@@ -50,11 +48,6 @@ namespace RelationalRedisAPI.Controllers
                 return UnprocessableEntity();
             }
 
-            // TODO - is this needed?
-            foreach (var power in hero.Powers)
-            {
-                PowerAdapter.Save(power);
-            }
             HeroAdapter.Save(hero);
 
             return CreatedAtRoute(nameof(Get), new {hero.Id}, hero);
