@@ -1,5 +1,5 @@
-﻿using Data;
-using Interfaces;
+﻿using Adapters.Interfaces;
+using Data;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,9 +11,9 @@ namespace RelationalRedisAPI.Controllers
     [ApiController]
     public class HeroesController : ControllerBase
     {
-        private IEntityAdapter<Hero> HeroAdapter { get; }
+        private IHeroAdapter HeroAdapter { get; }
 
-        public HeroesController(IEntityAdapter<Hero> heroAdapter)
+        public HeroesController(IHeroAdapter heroAdapter)
         {
             this.HeroAdapter = heroAdapter;
         }

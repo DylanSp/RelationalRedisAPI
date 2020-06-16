@@ -1,13 +1,12 @@
-﻿using Data;
-using Interfaces;
+﻿using Adapters.Interfaces;
+using Data;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Adapters
 {
-    public class PowerRedisAdapter : IEntityAdapter<Power>
+    public class PowerRedisAdapter : IPowerAdapter
     {
         private readonly IDatabase Db;
 

@@ -1,5 +1,5 @@
-﻿using Data;
-using Interfaces;
+﻿using Adapters.Interfaces;
+using Data;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,9 +11,9 @@ namespace RelationalRedisAPI.Controllers
     [ApiController]
     public class PowersController : ControllerBase
     {
-        private IEntityAdapter<Power> PowerAdapter { get; }
+        private IPowerAdapter PowerAdapter { get; }
 
-        public PowersController(IEntityAdapter<Power> powerAdapter)
+        public PowersController(IPowerAdapter powerAdapter)
         {
             this.PowerAdapter = powerAdapter;
         }

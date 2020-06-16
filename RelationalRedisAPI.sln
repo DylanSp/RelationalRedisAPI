@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2050
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RelationalRedisAPI", "RelationalRedisAPI\RelationalRedisAPI.csproj", "{A84C2974-DA34-49C0-B8B3-E173CBE1E000}"
 EndProject
@@ -13,7 +12,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapters", "Adapters\Adapte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RelationalRedisAPI.Tests", "RelationalRedisAPI.Tests\RelationalRedisAPI.Tests.csproj", "{7D623A56-6BE0-4758-BCA5-4411B6FFE6EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelationalRedisGraphQLAPI", "RelationalRedisGraphQLAPI\RelationalRedisGraphQLAPI.csproj", "{D7838C18-0603-40ED-A9E7-7625F85BCC85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RelationalRedisGraphQLAPI", "RelationalRedisGraphQLAPI\RelationalRedisGraphQLAPI.csproj", "{D7838C18-0603-40ED-A9E7-7625F85BCC85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapters.Interfaces", "Adapters.Interfaces\Adapters.Interfaces.csproj", "{6645BCB6-AEAE-4D60-83D4-9D9401F4F4E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +46,10 @@ Global
 		{D7838C18-0603-40ED-A9E7-7625F85BCC85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7838C18-0603-40ED-A9E7-7625F85BCC85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7838C18-0603-40ED-A9E7-7625F85BCC85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6645BCB6-AEAE-4D60-83D4-9D9401F4F4E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6645BCB6-AEAE-4D60-83D4-9D9401F4F4E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6645BCB6-AEAE-4D60-83D4-9D9401F4F4E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6645BCB6-AEAE-4D60-83D4-9D9401F4F4E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

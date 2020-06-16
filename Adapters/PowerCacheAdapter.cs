@@ -1,12 +1,11 @@
-﻿using Data;
-using Interfaces;
+﻿using Adapters.Interfaces;
+using Data;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Adapters
 {
-    public class PowerCacheAdapter : IEntityAdapter<Power>
+    public class PowerCacheAdapter : IPowerAdapter
     {
         public IEnumerable<Power> ReadAll()
         {

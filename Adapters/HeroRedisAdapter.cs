@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using Adapters.Interfaces;
+using Data;
 using Interfaces;
 using StackExchange.Redis;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace Adapters
 {
-    public class HeroRedisAdapter : IEntityAdapter<Hero>
+    public class HeroRedisAdapter : IHeroAdapter
     {
         private readonly IDatabase Db;
         private readonly IEntityAdapter<Power> PowerAdapter;

@@ -1,11 +1,11 @@
-﻿using Data;
-using Interfaces;
+﻿using Adapters.Interfaces;
+using Data;
 using System;
 using System.Collections.Generic;
 
 namespace Adapters
 {
-    public class HeroCacheAdapter : IEntityAdapter<Hero>
+    public class HeroCacheAdapter : IHeroAdapter
     {
         public IEnumerable<Hero> ReadAll()
         {

@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using Adapters.Interfaces;
+using Data;
 using Interfaces;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace Adapters
 {
-    public class TeamSqlAdapter : IEntityAdapter<Team>
+    public class TeamSqlAdapter : ITeamAdapter
     {
         private readonly string ConnectionString;
         private readonly IEntityAdapter<Hero> HeroAdapter;

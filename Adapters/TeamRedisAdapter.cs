@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using Adapters.Interfaces;
+using Data;
 using Interfaces;
 using StackExchange.Redis;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Adapters
 {
-    public class TeamRedisAdapter : IEntityAdapter<Team>
+    public class TeamRedisAdapter : ITeamAdapter
     {
         private readonly IDatabase Db;
         private readonly IEntityAdapter<Hero> HeroAdapter;

@@ -1,11 +1,11 @@
-﻿using Data;
-using Interfaces;
+﻿using Adapters.Interfaces;
+using Data;
 using System;
 using System.Collections.Generic;
 
 namespace Adapters
 {
-    public class TeamCacheAdapter : IEntityAdapter<Team>
+    public class TeamCacheAdapter : ITeamAdapter
     {
         public IEnumerable<Team> ReadAll()
         {

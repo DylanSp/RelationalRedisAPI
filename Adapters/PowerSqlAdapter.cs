@@ -1,13 +1,12 @@
-﻿using Data;
-using Interfaces;
+﻿using Adapters.Interfaces;
+using Data;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
 
 namespace Adapters
 {
-    public class PowerSqlAdapter : IEntityAdapter<Power>
+    public class PowerSqlAdapter : IPowerAdapter
     {
         private readonly string ConnectionString;
 

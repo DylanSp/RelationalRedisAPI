@@ -1,4 +1,5 @@
 ﻿using Adapters;
+using Adapters.Interfaces;
 using Data;
 using Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -29,10 +30,10 @@ namespace RelationalRedisAPI
 
             var redisConnectionString = "localhost";
 
-            services.AddTransient<IEntityAdapter<Power>>(_services => new PowerRedisAdapter(redisConnectionString));
-            services.AddTransient<IEntityAdapter<Hero>>(_services =>
+            services.AddTransient<IPowerAdapter>(_services => new PowerRedisAdapter(redisConnectionString));
+            services.AddTransient<IHeroAdapter>(_services =>
             {
-                var powerAdapter = _services.GetRequiredService<IEntityAdapter<Power>>();
+                var powerAdapter = _services.GetRequiredService<IPowerAdapter>();
                 return new HeroRedisAdapter(redisConnectionString, powerAdapter);
             });
         }
