@@ -26,7 +26,7 @@ namespace RelationalRedisAPI.Controllers
         }
 
         // GET api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c
-        [HttpGet("{id:guid}", Name = nameof(Get))]
+        [HttpGet("{id:guid}", Name = nameof(Get))]  // named so Create() can refer to it with CreatedAtRoute()
         public ActionResult<Hero> Get([FromRoute]Guid id)
         {
             var maybeHero = HeroAdapter.Read(id);
