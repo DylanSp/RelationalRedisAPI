@@ -20,14 +20,14 @@ namespace RelationalRedisAPI.Controllers
 
         // GET api/heroes
         [HttpGet]
-        public ActionResult<IEnumerable<Hero>> GetAll()
+        public ActionResult<IEnumerable<Hero>> GetAllHeroes()
         {
             return HeroAdapter.ReadAll().ToList();
         }
 
         // GET api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c
-        [HttpGet("{id:guid}", Name = nameof(Get))]  // named so Create() can refer to it with CreatedAtRoute()
-        public ActionResult<Hero> Get([FromRoute]Guid id)
+        [HttpGet("{id:guid}", Name = nameof(GetHero))]  // named so Create() can refer to it with CreatedAtRoute()
+        public ActionResult<Hero> GetHero([FromRoute]Guid id)
         {
             var maybeHero = HeroAdapter.Read(id);
             if (maybeHero.HasValue)
@@ -40,7 +40,7 @@ namespace RelationalRedisAPI.Controllers
 
         // POST api/heroes
         [HttpPost]
-        public ActionResult<Hero> Create([FromBody] Hero hero)
+        public ActionResult<Hero> CreateHero([FromBody] Hero hero)
         {
             var heroExists = HeroAdapter.Read(hero.Id).HasValue;
             if (heroExists)
@@ -50,12 +50,12 @@ namespace RelationalRedisAPI.Controllers
 
             HeroAdapter.Save(hero);
 
-            return CreatedAtRoute(nameof(Get), new {hero.Id}, hero);
+            return CreatedAtRoute(nameof(GetHero), new {hero.Id}, hero);
         }
 
         // POST api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c
         [HttpPost("{id:guid}")]
-        public ActionResult<Hero> Update([FromRoute] Guid id, [FromBody] Hero hero)
+        public ActionResult<Hero> UpdateHero([FromRoute] Guid id, [FromBody] Hero hero)
         {
             var heroExists = HeroAdapter.Read(id).HasValue;
             if (!heroExists)
@@ -74,7 +74,7 @@ namespace RelationalRedisAPI.Controllers
 
         // DELETE api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c
         [HttpDelete("{id:guid}")]
-        public ActionResult Delete([FromRoute] Guid id)
+        public ActionResult DeleteHero([FromRoute] Guid id)
         {
             var heroExists = HeroAdapter.Read(id).HasValue;
             if (!heroExists)
