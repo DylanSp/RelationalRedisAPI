@@ -68,7 +68,7 @@ namespace Adapters
         public IEnumerable<Hero> SearchHeroes(string name, string location)
         {
             var builder = new SqlBuilder();
-            var template = builder.AddTemplate(@"SELECT Id, Name, Location
+            var template = builder.AddTemplate(@"SELECT Id
                                                  FROM Heroes
                                                  /**where**/");
 
@@ -82,11 +82,24 @@ namespace Adapters
                 builder.Where("Location = @Location", new { location });
             }
 
+            IEnumerable<Guid> heroIds;
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                return connection.Query<Hero>(template.RawSql, template.Parameters);
+                heroIds = connection.Query<Guid>(template.RawSql, template.Parameters);
             }
+
+            // TODO - optimize this by doing joins in original query, read entire heroes from that query
+            var heroes = new List<Hero>();
+            foreach(var heroId in heroIds)
+            {
+                var possibleHero = Read(heroId);
+                if (possibleHero.HasValue)
+                {
+                    heroes.Add(possibleHero.Value);
+                }
+            }
+            return heroes;
         }
 
         public Hero? Read(Guid id)
