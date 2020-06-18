@@ -1,4 +1,5 @@
 ﻿using Adapters.Interfaces;
+using Dapper;
 using Data;
 using Interfaces;
 using System;
@@ -62,6 +63,30 @@ namespace Adapters
             }
 
             return heroes;
+        }
+
+        public IEnumerable<Hero> SearchHeroes(string name, string location)
+        {
+            var builder = new SqlBuilder();
+            var template = builder.AddTemplate(@"SELECT Id, Name, Location
+                                                 FROM Heroes
+                                                 /**where**/");
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                builder.Where("Name = @Name", new { name });
+            }
+
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                builder.Where("Location = @Location", new { location });
+            }
+
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                return connection.Query<Hero>(template.RawSql, template.Parameters);
+            }
         }
 
         public Hero? Read(Guid id)

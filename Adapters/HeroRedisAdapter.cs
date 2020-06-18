@@ -38,6 +38,11 @@ namespace Adapters
 
             return heroes;
         }
+        
+        public IEnumerable<Hero> SearchHeroes(string name, string location)
+        {
+            throw new NotImplementedException();
+        }
 
         public Hero? Read(Guid id)
         {

@@ -20,9 +20,9 @@ namespace RelationalRedisAPI.Controllers
 
         // GET api/heroes
         [HttpGet]
-        public ActionResult<IEnumerable<Hero>> GetAllHeroes()
+        public ActionResult<IEnumerable<Hero>> GetAllHeroes([FromQuery] string name, [FromQuery] string location)
         {
-            return HeroAdapter.ReadAll().ToList();
+            return HeroAdapter.SearchHeroes(name, location).ToList();
         }
 
         // GET api/heroes/32c64485-d35c-4a01-b412-06a9cb84c19c

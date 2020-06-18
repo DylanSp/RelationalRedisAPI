@@ -28,14 +28,28 @@ namespace RelationalRedisAPI
 
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info {Title = "Superhero API", Version = "v1"}); });
 
-            var redisConnectionString = "localhost";
-
-            services.AddTransient<IPowerAdapter>(_services => new PowerRedisAdapter(redisConnectionString));
-            services.AddTransient<IHeroAdapter>(_services =>
+            if (false)
             {
-                var powerAdapter = _services.GetRequiredService<IPowerAdapter>();
-                return new HeroRedisAdapter(redisConnectionString, powerAdapter);
-            });
+                var redisConnectionString = "localhost";
+
+                services.AddTransient<IPowerAdapter>(_services => new PowerRedisAdapter(redisConnectionString));
+                services.AddTransient<IHeroAdapter>(_services =>
+                {
+                    var powerAdapter = _services.GetRequiredService<IPowerAdapter>();
+                    return new HeroRedisAdapter(redisConnectionString, powerAdapter);
+                });
+            }
+            else
+            {
+                var sqlConnectionString = "Data Source=localhost;Initial Catalog=Superheroes;Persist Security Info=True;User ID=sa;Password=adminpass";
+                services.AddTransient<IPowerAdapter>(_services => new PowerSqlAdapter(sqlConnectionString));
+                services.AddTransient<IHeroAdapter>(_services =>
+                {
+                    var powerAdapter = _services.GetRequiredService<IPowerAdapter>();
+                    return new HeroSqlAdapter(sqlConnectionString, powerAdapter);
+                });
+            }
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

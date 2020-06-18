@@ -12,6 +12,11 @@ namespace Adapters
             throw new NotImplementedException();
         }
 
+        public IEnumerable<Hero> SearchHeroes(string name, string location)
+        {
+            throw new NotImplementedException();
+        }
+
         public Hero? Read(Guid id)
         {
             throw new NotImplementedException();
