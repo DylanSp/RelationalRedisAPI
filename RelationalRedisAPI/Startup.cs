@@ -38,6 +38,11 @@ namespace RelationalRedisAPI
                     var powerAdapter = _services.GetRequiredService<IPowerAdapter>();
                     return new HeroRedisAdapter(redisConnectionString, powerAdapter);
                 });
+                services.AddTransient<ITeamAdapter>(_services =>
+                {
+                    var heroAdapter = _services.GetRequiredService<IHeroAdapter>();
+                    return new TeamRedisAdapter(redisConnectionString, heroAdapter);
+                });
             }
             else
             {
@@ -47,6 +52,11 @@ namespace RelationalRedisAPI
                 {
                     var powerAdapter = _services.GetRequiredService<IPowerAdapter>();
                     return new HeroSqlAdapter(sqlConnectionString, powerAdapter);
+                });
+                services.AddTransient<ITeamAdapter>(_services =>
+                {
+                    var heroAdapter = _services.GetRequiredService<IHeroAdapter>();
+                    return new TeamSqlAdapter(sqlConnectionString, heroAdapter);
                 });
             }
             
