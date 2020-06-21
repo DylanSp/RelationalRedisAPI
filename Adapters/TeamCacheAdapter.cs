@@ -12,6 +12,21 @@ namespace Adapters
             throw new NotImplementedException();
         }
 
+        public IEnumerable<Team> SearchTeams(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Team? SearchTeamsByMember(Guid heroId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Team? SearchTeamsByMember(string heroName)
+        {
+            throw new NotImplementedException();
+        }
+
         public Team? Read(Guid id)
         {
             throw new NotImplementedException();

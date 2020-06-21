@@ -73,6 +73,21 @@ namespace Adapters
             return teams;
         }
 
+        public IEnumerable<Team> SearchTeams(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Team? SearchTeamsByMember(Guid heroId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Team? SearchTeamsByMember(string heroName)
+        {
+            throw new NotImplementedException();
+        }
+
         public Team? Read(Guid id)
         {
             using (var connection = new SqlConnection(ConnectionString))
