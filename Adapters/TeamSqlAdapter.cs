@@ -25,50 +25,53 @@ namespace Adapters
 
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var heroes = HeroAdapter.ReadAll(); // TODO - up here so it doesn't conflict with connection opened below, but is that necessary?
-
-                var teamQueryString = "SELECT Id, Name FROM Teams";
-                var teamCommand = new SqlCommand(teamQueryString, connection);
-
                 connection.Open();
 
-                using (var reader = teamCommand.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        teams.Add(new Team((Guid)reader["Id"], (string)reader["Name"], new List<Hero>()));
-                    }
-                }
+                var heroQuery = @"SELECT Id, TeamId
+                                  FROM Heroes";
+                var heroCommand = new SqlCommand(heroQuery, connection);
 
-                // add in teams' heroes
-                // TODO - n + 1 query problem; to avoid, seems like we'd have to replicate hero-reading logic from HeroSqlAdapter here
-                var heroQueryString = "SELECT Id, TeamId FROM Heroes";
-                var heroCommand = new SqlCommand(heroQueryString, connection);
-                
+                var teamIdsWithHeroIds = new Dictionary<Guid, List<Guid>>();
                 using (var reader = heroCommand.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         var heroId = (Guid)reader["Id"];
-                        var dbTeamId = reader["TeamId"];
-                        Guid? teamId = dbTeamId == DBNull.Value
-                                        ? null
-                                        : (Guid?)dbTeamId;
-
-                        var matchingTeams = teams.Where(team => team.Id == teamId);
-                        if (matchingTeams.Count() > 0)
+                        var teamId = reader["TeamId"] == DBNull.Value ? null : (Guid?)reader["TeamId"];
+                        if (teamId.HasValue)
                         {
-                            var hero = HeroAdapter.Read(heroId);    // TODO - issues with creating new DB connection while executing this one?
-                                                                    // TODO - if everything is in a transaction, can you have nested transactions?
-                            if (hero.HasValue)  // should always fire, assuming database doesn't change between ExecuteReader() call and Read()
+                            if (!teamIdsWithHeroIds.ContainsKey(teamId.Value))
                             {
-                                // First() should never throw; the matchingTeams.Count() > 0 condition requires at least one match
-                                matchingTeams.First().Members.Append(hero.Value);
+                                teamIdsWithHeroIds[teamId.Value] = new List<Guid>();
                             }
+                            teamIdsWithHeroIds[teamId.Value].Add(heroId);
                         }
                     }
                 }
+
+                var teamQueryString = "SELECT Id, Name FROM Teams";
+                var teamCommand = new SqlCommand(teamQueryString, connection);
+
+                using (var reader = teamCommand.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var heroes = new List<Hero>();
+                        var teamId = (Guid)reader["Id"];
+                        var teamName = (string)reader["Name"];
+                        foreach(var heroId in teamIdsWithHeroIds.GetValueOrDefault(teamId) ?? new List<Guid>())
+                        {
+                            var maybeHero = HeroAdapter.Read(heroId);
+                            if (maybeHero.HasValue) // should always fire
+                            {
+                                heroes.Add(maybeHero.Value);
+                            }
+                        }
+                        teams.Add(new Team(teamId, teamName, heroes));
+                    }
+                }
             }
+                
 
             return teams;
         }
@@ -144,9 +147,9 @@ namespace Adapters
             using (var connection = new SqlConnection(ConnectionString))
             {
                 var teamQueryString = @"IF EXISTS ( SELECT * FROM Teams WHERE Id = @id )
-                                        UPDATE Teams SET Name = @name WHERE Id = @id
-                                    ELSE
-                                        INSERT Teams (Id, Name) VALUES (@id, @name)";
+                                            UPDATE Teams SET Name = @name WHERE Id = @id
+                                        ELSE
+                                            INSERT Teams (Id, Name) VALUES (@id, @name)";
                 var teamCommand = new SqlCommand(teamQueryString, connection);
                 teamCommand.Parameters.AddWithValue("@id", newTeamData.Id);
                 teamCommand.Parameters.AddWithValue("@name", newTeamData.Name);
