@@ -1,4 +1,5 @@
 ﻿using Adapters.Interfaces;
+using Dapper;
 using Data;
 using Interfaces;
 using System;
@@ -78,17 +79,58 @@ namespace Adapters
 
         public IEnumerable<Team> SearchTeams(string name)
         {
-            throw new NotImplementedException();
+            var builder = new SqlBuilder();
+            var template = builder.AddTemplate(@"SELECT Id
+                                                 FROM Teams
+                                                 /**where**/");
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                builder.Where("Name = @Name", new { name });
+            }
+
+            IEnumerable<Guid> teamIds;
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                teamIds = connection.Query<Guid>(template.RawSql, template.Parameters);
+            }
+
+            // TODO - optimize this by doing joins in original query, read entire teams from that query (but how to handle getting powers for heroes?)
+            var teams = new List<Team>();
+            foreach (var teamId in teamIds)
+            {
+                var possibleHero = Read(teamId);
+                if (possibleHero.HasValue)
+                {
+                    teams.Add(possibleHero.Value);
+                }
+            }
+            return teams;
         }
 
         public Team? SearchTeamsByMember(Guid heroId)
         {
-            throw new NotImplementedException();
+            var allTeams = ReadAll();
+            var matchingTeams = allTeams.Where(team => team.Members.Select(hero => hero.Id).Contains(heroId));
+            if (matchingTeams.Any())
+            {
+                return matchingTeams.First();
+            }
+
+            return null;
         }
 
         public Team? SearchTeamsByMember(string heroName)
         {
-            throw new NotImplementedException();
+            var allTeams = ReadAll();
+            var matchingTeams = allTeams.Where(team => team.Members.Select(hero => hero.Name).Contains(heroName));
+            if (matchingTeams.Any())
+            {
+                return matchingTeams.First();
+            }
+
+            return null;
         }
 
         public Team? Read(Guid id)

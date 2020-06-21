@@ -23,6 +23,33 @@ namespace RelationalRedisAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Team>> GetTeams([FromQuery] string teamName, [FromQuery] string heroId, [FromQuery] string heroName)
         {
+            if (!string.IsNullOrWhiteSpace(teamName))
+            {
+                return TeamAdapter.SearchTeams(teamName).ToList();
+            }
+
+            if (Guid.TryParse(heroId, out var heroGuid))
+            {
+                var possiblyMatchingTeam = TeamAdapter.SearchTeamsByMember(heroGuid);
+                var teams = new List<Team>();
+                if (possiblyMatchingTeam.HasValue)
+                {
+                    teams.Add(possiblyMatchingTeam.Value);
+                }
+                return teams;
+            }
+
+            if (!string.IsNullOrWhiteSpace(heroName))
+            {
+                var possiblyMatchingTeam = TeamAdapter.SearchTeamsByMember(heroName);
+                var teams = new List<Team>();
+                if (possiblyMatchingTeam.HasValue)
+                {
+                    teams.Add(possiblyMatchingTeam.Value);
+                }
+                return teams;
+            }
+
             return TeamAdapter.ReadAll().ToList();
         }
 
