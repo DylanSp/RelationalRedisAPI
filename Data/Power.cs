@@ -14,6 +14,8 @@ namespace Data
         [Required]
         public string Name { get; }
 
+        // TODO - add Description field
+
         public Power(Guid id, string name)
         {
             this.Id = id;

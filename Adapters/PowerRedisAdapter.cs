@@ -35,6 +35,11 @@ namespace Adapters
             return powers;
         }
 
+        public IEnumerable<Power> SearchPowers(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public Power? Read(Guid id)
         {
             var isPresent = Db.KeyExists($"power:{id.ToString()}");

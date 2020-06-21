@@ -1,4 +1,5 @@
 ﻿using Adapters.Interfaces;
+using Dapper;
 using Data;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,38 @@ namespace Adapters
                 }
             }
 
+            return powers;
+        }
+
+        public IEnumerable<Power> SearchPowers(string name)
+        {
+            var builder = new SqlBuilder();
+            var template = builder.AddTemplate(@"SELECT Id
+                                                 FROM Powers
+                                                 /**where**/");
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                builder.Where("Name = @Name", new { name });
+            }
+
+            IEnumerable<Guid> powerIds;
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                powerIds = connection.Query<Guid>(template.RawSql, template.Parameters);
+            }
+
+            // TODO - optimize this by doing joins in original query, read entire powers from that query
+            var powers = new List<Power>();
+            foreach (var powerId in powerIds)
+            {
+                var possiblePower = Read(powerId);
+                if (possiblePower.HasValue)
+                {
+                    powers.Add(possiblePower.Value);
+                }
+            }
             return powers;
         }
 

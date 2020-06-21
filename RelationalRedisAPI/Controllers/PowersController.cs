@@ -20,9 +20,9 @@ namespace RelationalRedisAPI.Controllers
 
         // GET api/powers
         [HttpGet]
-        public ActionResult<IEnumerable<Power>> GetAllPowers()
+        public ActionResult<IEnumerable<Power>> GetAllPowers([FromQuery] string name)
         {
-            return PowerAdapter.ReadAll().ToList();
+            return PowerAdapter.SearchPowers(name).ToList();
         }
 
         // GET api/powers/32c64485-d35c-4a01-b412-06a9cb84c19c

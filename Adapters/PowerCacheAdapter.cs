@@ -12,6 +12,11 @@ namespace Adapters
             throw new NotImplementedException();
         }
 
+        public IEnumerable<Power> SearchPowers(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public Power? Read(Guid id)
         {
             throw new NotImplementedException();
